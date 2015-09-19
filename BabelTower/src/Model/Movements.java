@@ -24,5 +24,51 @@ public class Movements {
         matrix[row][0] = firstElement;
         return matrix;
     }
+    
+    public int getColumnBlankSpace(int[][] matrix){
+        int column=-1;
+        for(int j=0;j<matrix.length;j++){
+            for(int i=0;i<matrix[j].length;i++){
+               if(matrix[j][i]==-1){
+                   column=i;
+               }
+            }
+        }
+        
+        return column;
+    }
+    
+    public int getRowBlankSpace(int[][] matrix){
+        int row=-1;
+        for(int j=0;j<matrix.length;j++){
+            for(int i=0;i<matrix[j].length;i++){
+               if(matrix[j][i]==-1){
+                   row=j;
+               }
+            }
+        } 
+        return row;
+    }
+    
+    public int[][] MoveDown(int[][] matrix){//Espacio queda abajo
+        int row=getRowBlankSpace(matrix);
+        int column=getColumnBlankSpace(matrix);
+        int element=matrix[row+1][column];
+        System.out.println("elemento "+element+ "fila "+ row+" columna "+column);
+        matrix[row][column]=element;
+        matrix[row+1][column]=-1;
+        return matrix;
+    }
+    
+    public int[][] MoveUp(int[][] matrix){//Espacio queda arriba
+        int row=getRowBlankSpace(matrix);
+        int column=getColumnBlankSpace(matrix);
+        int element=matrix[row-1][column];
+        System.out.println("elemento "+element+ "fila "+ row+" columna "+column);
+        matrix[row][column]=element;
+        matrix[row-1][column]=-1;
+        return matrix;
+    }
+    
 
 }
