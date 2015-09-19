@@ -1,10 +1,14 @@
 package Controller;
 
+import Model.CheckTower;
 import Model.*;
+import java.io.File;
+import java.io.IOException;
 
 public class BabelTower {
     private Tower initialMatrix=new Tower();
     private Tower finalMatrix=new Tower();
+    private Txt text = new Txt();
     /*public static void main(String[] args) {        
        int [][] matriz = {{4,4,4,-1},{1,1,1,1},{2,2,2,2},{8,4,5,12}};
        
@@ -16,6 +20,16 @@ public class BabelTower {
           //System.out.println(inicio.isCorrect);
    
     }*/
+    
+    public String ReadTxt(File file) throws IOException{
+        return text.Read(file);
+    }
+    
+    public void WriteTxt(String Text){
+        text.Write(Text);
+    }
+    
+
     
     
     public boolean[] ConvertMatrix(String InitialMatrix,String FinalMatrix){
