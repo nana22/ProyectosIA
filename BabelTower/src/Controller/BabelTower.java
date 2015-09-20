@@ -59,13 +59,15 @@ public class BabelTower {
         initialMatrix.printMatrix();
         */
         
-        System.out.println("Muevo espacio hacia abajo configuracion inicial");
+        /*System.out.println("Muevo espacio hacia abajo configuracion inicial");
         initialMatrix.setMatrix(movements.MoveDown( initialMatrix.getMatrix()));
         initialMatrix.printMatrix();
         
         System.out.println("Muevo espacio hacia arriba configuracion inicial");
         initialMatrix.setMatrix(movements.MoveUp( initialMatrix.getMatrix()));
-        initialMatrix.printMatrix();
+        initialMatrix.printMatrix();*/
+        System.out.println("Movimiento columna");
+        movements.MoveColumn( initialMatrix.getMatrix());
         
         
         boolean [] IsValid={initialMatrix.isCorrect,finalMatrix.isCorrect};

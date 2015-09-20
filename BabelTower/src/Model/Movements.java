@@ -54,7 +54,7 @@ public class Movements {
         int row=getRowBlankSpace(matrix);
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row+1][column];
-        System.out.println("elemento "+element+ "fila "+ row+" columna "+column);
+        //System.out.println("elemento "+element+ "fila "+ row+" columna "+row);
         matrix[row][column]=element;
         matrix[row+1][column]=-1;
         return matrix;
@@ -64,11 +64,34 @@ public class Movements {
         int row=getRowBlankSpace(matrix);
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row-1][column];
-        System.out.println("elemento "+element+ "fila "+ row+" columna "+column);
+        //System.out.println("elemento "+element+ "fila "+ row+" columna "+row);
         matrix[row][column]=element;
         matrix[row-1][column]=-1;
         return matrix;
     }
+    public void MoveColumn(int[][]matrix){//Realiza el movimiento de columna permitido
+        Tower t=new Tower();
+        int row=getRowBlankSpace(matrix); 
+        if(row==0){//Esta en la primera fila
+            System.out.println("Muevo espacio hacia abajo el espacio");
+            t.setMatrix(MoveDown(matrix));   
+            t.printMatrix();
+        }
+        else if(row==4){//Esta en la última fila
+            System.out.println("Muevo espacio hacia arriba el espacio");
+            t.setMatrix(MoveUp(matrix));   
+            t.printMatrix();           
+        }
+        else{//Esta en el medio
+            System.out.println("Muevo espacio hacia abajo el espacio");
+            t.setMatrix(MoveDown(matrix));   
+            t.printMatrix();
+            System.out.println("Muevo espacio hacia arriba el espacio");
+            t.setMatrix(MoveUp(matrix));   
+            t.printMatrix();
+        }
+    }
+    
     
 
 }
