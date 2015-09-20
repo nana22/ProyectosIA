@@ -43,13 +43,17 @@ public class BabelTower {
         initialMatrix.isCorrect=check.isIsCorrect(initialMatrix.matrix);
         System.out.println(check.isIsCorrect(initialMatrix.matrix));
         
-        /*
         finalMatrix.setMatrix(finalMatrix.ConvertMatrix(FinalMatrix));
         finalMatrix.printMatrix();
         finalMatrix.isCorrect=check.isIsCorrect(finalMatrix.matrix);
         System.out.println(check.isIsCorrect(finalMatrix.matrix));
         
-        /*
+        
+        boolean [] IsValid={initialMatrix.isCorrect,finalMatrix.isCorrect};//retorna si la matrices tienen configuraciones correctas
+        return IsValid;        
+    }
+     
+    /*probando funciones
         System.out.println("Mueve a la derecha, la fila 3 de la configuracion inicial");
         initialMatrix.setMatrix(movements.MoveToRightRow(3, initialMatrix.getMatrix()));
         initialMatrix.printMatrix();
@@ -65,13 +69,11 @@ public class BabelTower {
         
         System.out.println("Muevo espacio hacia arriba configuracion inicial");
         initialMatrix.setMatrix(movements.MoveUp( initialMatrix.getMatrix()));
-        initialMatrix.printMatrix();*/
+        initialMatrix.printMatrix();
         System.out.println("Movimiento columna");
         movements.MoveColumn( initialMatrix.getMatrix());
         
-        
-        boolean [] IsValid={initialMatrix.isCorrect,finalMatrix.isCorrect};
-        return IsValid;        
-    }
-    
+        Algorithm a=new Algorithm();
+        a.open.add(initialMatrix);
+        System.out.println(a.CheckOpen(initialMatrix.getMatrix()));*/
 }
