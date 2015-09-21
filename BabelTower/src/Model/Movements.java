@@ -4,7 +4,8 @@ package Model;
 
 public class Movements {
     
-    public int[][] MoveToLeftRow(int row, int[][] matrix){
+   
+   public int[][] MoveToLeftRow(int row, int[][] matrix){
         int length = matrix[row].length;
         int finalElement = matrix[row][0];
         for (int k=0; k<length-1; k++){
@@ -16,6 +17,7 @@ public class Movements {
   
 
     public  int[][] MoveToRightRow(int row, int[][] matrix) {
+         
         int length = matrix[row].length;
         int firstElement = matrix[row][length-1];
         for (int k=length-1; k>=1; k--){
@@ -52,21 +54,25 @@ public class Movements {
     
     public int[][] MoveDown(int[][] matrix){//Espacio queda abajo
         int row=getRowBlankSpace(matrix);
+        if(row<4)
+        {
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row+1][column];
         //System.out.println("elemento "+element+ "fila "+ row+" columna "+row);
         matrix[row][column]=element;
         matrix[row+1][column]=-1;
+        }
         return matrix;
     }
     
     public int[][] MoveUp(int[][] matrix){//Espacio queda arriba
         int row=getRowBlankSpace(matrix);
+        if(row>0){
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row-1][column];
         //System.out.println("elemento "+element+ "fila "+ row+" columna "+row);
         matrix[row][column]=element;
-        matrix[row-1][column]=-1;
+        matrix[row-1][column]=-1;}
         return matrix;
     }
     public void MoveColumn(int[][]matrix){//Realiza el movimiento de columna permitido
