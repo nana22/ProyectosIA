@@ -1,15 +1,78 @@
 package Model;
-
+import java.util.Comparator;
+import java.util.Arrays;
 
 public class Tower {
     public int[][] matrix;
     public boolean isCorrect;
-    public int cost;
-    
+    public int diferencia;
+    public int cost;    
+    public int g;    
+    public int h;
+    private Tower padre;
     
     
     public int[][] getMatrix() {
         return matrix;
+    }
+    
+    public Tower getPadre()
+    {
+        return this.padre;
+    }
+    
+    public int getDiffer()
+    {
+        return this.diferencia;
+    }
+    
+    public int getCost()
+    {
+        return this.cost;
+    }
+
+    public int getG()
+    {
+        return g;
+    }
+    
+    public int getH()
+    {
+        return h;
+    }
+    
+    public int getF()
+    {
+        return this.g+this.h;
+    }
+    
+    public void setMatrix(int[][] matrix) {
+        this.matrix = matrix;
+    }
+    
+    public void setPadre(Tower padre)
+    {
+        this.padre=padre;
+    }
+
+    public void setDiff( int value)
+    {
+        this.diferencia=value;
+    }
+    
+    public void setCost( int  c)
+    {
+        this.cost=c;
+    }
+    
+    public void setG(int g)
+    {
+        this.g=g;
+    }
+    
+    public void setH(int h)
+    {
+        this.h=h;
     }
     
     public void printMatrix() {
@@ -20,12 +83,6 @@ public class Tower {
             System.out.println(" ");
         }
     }
-
-    public void setMatrix(int[][] matrix) {
-        this.matrix = matrix;
-    }
-
-
 
     public void setIsCorrect(boolean isCorrect) {
         this.isCorrect = isCorrect;
@@ -63,6 +120,41 @@ public class Tower {
         }
         return matrix;
         
+    }  
+   
+    
+    public int compareTo(Tower compareT)
+    {
+        int[][] aux = compareT.getMatrix();
+        int[][] actual = this.getMatrix();
+        for(int i=0;i<aux.length;i++)
+        {
+            for(int j=0;j<aux[i].length;j++)
+            {
+                if(aux[i][j]!=actual[i][j])
+                    return 1;
+            }
+        }
+        
+    return 0;
+        
+    }
+    
+     public static Comparator<Tower> TowerFComparator = new Comparator<Tower>() {
+
+        @Override
+        public int compare(Tower o1, Tower o2) {
+           return new Integer(o1.getF()).compareTo(new Integer(o2.getF()));
+        }
+    };
+    
+    
+    public boolean equals(Tower t1)
+    {
+        boolean same=false;
+        if(t1!=null)
+            same = compareTo(t1)==0;
+        return same;
     }  
     
 }
