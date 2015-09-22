@@ -8,22 +8,24 @@ import Model.Movements;
  * @author kelly
  */
 public class A_Estrella {
-
-       
-      
+ //Estado inicial
     private int inicial[][];
-    
+    //Estado final
     private int estFinal[][];
-    
+    //Nodo actual
     private Tower nodoActual;
     
-    private Movements movimientos = new  Movements();
+    //Pila de abiertos
     private ArrayList listaAbierta;
-    
+    //Lista de cerrados
     private ArrayList listaCerrados;
     
+    private Movements movimientos = new  Movements();
+    
+    //Camino mas corto A*
     public Tower A_Estrella( int[][] Minicial,int[][] Mfinal )
     {
+        //inicializo variables
         this.inicial = Minicial;
         this.estFinal = Mfinal;
         boolean caminoEncontrado=false;
@@ -32,38 +34,35 @@ public class A_Estrella {
         listaAbierta = new ArrayList<Tower>();
         listaCerrados = new ArrayList<Tower>();
         listaAbierta.add(nodoActual);
-        int iteraciones=0;
         
-        
+        //Mientras existan nodos en pila de abiertos
         while(!listaAbierta.isEmpty())
         {
+            //Pop de la pila
             nodoActual = (Tower) listaAbierta.get(0);
             this.listaAbierta.remove(0);
+            //Verifico si nodo actual corresponde con estado final
             caminoEncontrado = CompararEstados(nodoActual);
-//            System.out.println("Nodo Actual:");
-//            nodoActual.printMatrix();            
-//            System.out.print("F:");
-//            System.out.println(nodoActual.getF());
-//        
-//            System.out.print("Diff:");
-//            System.out.println(nodoActual.getDiffer());
-            
+            //si no corresponde
             if(!caminoEncontrado)
             {
-                iteraciones++;
+                //Asigno el nodo actual a cerrados
                 listaCerrados.add(nodoActual);
-                GenerarSucesores(iteraciones);
+                //Genero sucesores para nodo actual
+                GenerarSucesores();
                 
-            }
+            }//si no, termina while
             else
                 break;
             
         }
+        //si encontro camino, retorne nodo actual
         if(caminoEncontrado)
             return nodoActual;        
+        //retorne null
         return null;
     }
-    
+    //Copia una matriz en otra
     public int[][] CopiarMatriz(int[][] original)
     {
         int [][] copia=new int[5][4];
@@ -73,109 +72,154 @@ public class A_Estrella {
         return copia;
     }
 
-    
+    //Compara la matriz del estado actual con el estado final definido
     public boolean CompararEstados(Tower estadoActual)
     {
         int[][] matrix=estadoActual.getMatrix();
-        int diferencia =0;
-       boolean isCorrect = true;
-        for(int i=0;i<matrix.length-1;i++){
+        boolean isCorrect = true;
+        for(int i=1;i<matrix.length-1;i++){
             for(int j=0;j<matrix[i].length-1;j++){
                 if(matrix[i][j]!=estFinal[i][j])
                 {
-                    diferencia++;
                     isCorrect=false;
                 }
                     
             }
         }
-        estadoActual.setDiff(diferencia);
         return isCorrect;
     }
-    
-    public void GenerarSucesores(int iteraciones)
+       
+     ///Genera los sucesores del nodo actual
+    public void GenerarSucesores()
     {
+        //Lista temporal de sucesores generados
         ArrayList<Tower> nodosAdyacentes = new ArrayList<Tower>();
+        //variable que registra el indice de la lista
+        int indice=0;
+        //Realizar movimientos permitidos por cada fila
         for(int i=0;i<nodoActual.getMatrix().length-1;i++)
         {
-            
+            indice=0;
+            //Mover fila a la izquierda
             Tower adyacente= new  Tower();
-            adyacente.setPadre(nodoActual);
-            adyacente.setCost(1);
             adyacente.setMatrix(movimientos.MoveToLeftRow(i,CopiarMatriz(nodoActual.getMatrix())));
-            CompararEstados(adyacente);
-            adyacente.setG(nodoActual.getG()+adyacente.getCost());
-            adyacente.setH(adyacente.getDiffer());            
-            
-           nodosAdyacentes.add(adyacente);
-            
-            
+            //Verifica que adyacente generado no se encuentre en lista de adyacentes
+             indice=Contiene(nodosAdyacentes,adyacente);
+             if(indice==-1)//si no existe lo adjunta
+             {
+                adyacente.setPadre(nodoActual);
+                adyacente.setCost(1);            
+                adyacente.setG(nodoActual.getG()+adyacente.getCost());
+                adyacente.setH(H(adyacente.getMatrix()));            
+                nodosAdyacentes.add(adyacente);
+             }
+             //Mover fila derecha
             Tower adyacenteL=new  Tower();
-            adyacenteL.setPadre(nodoActual);
-            adyacenteL.setCost(1);
             adyacenteL.setMatrix(movimientos.MoveToRightRow(i,CopiarMatriz(nodoActual.getMatrix())));
-            CompararEstados(adyacenteL);
-            adyacenteL.setG(nodoActual.getG()+adyacenteL.getCost());
-            adyacenteL.setH(adyacenteL.getDiffer());            
-            nodosAdyacentes.add(adyacenteL);
+            //Verifica que adyacente generado no se encuentre en lista de adyacentes
+            indice=Contiene(nodosAdyacentes,adyacenteL);
+             if(indice==-1)//si no, lo adjunta
+             {
+                adyacenteL.setPadre(nodoActual);
+                adyacenteL.setCost(1);            
+                adyacenteL.setG(nodoActual.getG()+adyacenteL.getCost());
+                adyacenteL.setH(H(adyacenteL.getMatrix()));            
+                nodosAdyacentes.add(adyacenteL);
+             }
         }
-        
-        Tower adyacenteU=new  Tower();
-            adyacenteU.setPadre(nodoActual);
-            adyacenteU.setCost(1);
-            adyacenteU.setMatrix(movimientos.MoveDown(CopiarMatriz(nodoActual.getMatrix())));
-            CompararEstados(adyacenteU);
-            adyacenteU.setG(nodoActual.getG()+adyacenteU.getCost());
-            adyacenteU.setH(adyacenteU.getDiffer());            
-            nodosAdyacentes.add(adyacenteU);
-        
+        //Mover hacia abajo
+        int[][] matrizD = movimientos.MoveDown(CopiarMatriz(nodoActual.getMatrix()));
+        if(matrizD!=null)//si es permitido el movimiento
+        {
+            Tower adyacenteU=new  Tower();
+            adyacenteU.setMatrix(matrizD);
+            //Verifica que adyacente generado no se encuentre en lista de adyacentes
+            indice=Contiene(nodosAdyacentes,adyacenteU);
+                 if(indice==-1)//si no, lo adjunta
+                 {
+                    adyacenteU.setPadre(nodoActual);
+                    adyacenteU.setCost(1);            
+                    adyacenteU.setG(nodoActual.getG()+adyacenteU.getCost());
+                    adyacenteU.setH(H(adyacenteU.getMatrix()));            
+                    nodosAdyacentes.add(adyacenteU);
+                 }
+        }
+        //Mover hacia arriba
+        int[][] matrizU = movimientos.MoveUp(CopiarMatriz(nodoActual.getMatrix()));
+        if(matrizU!=null)//si es permitido el movimiento
+        {
             Tower adyacenteD=new  Tower();
-            adyacenteD.setPadre(nodoActual);
-            adyacenteD.setCost(1);
-            adyacenteD.setMatrix(movimientos.MoveUp(CopiarMatriz(nodoActual.getMatrix())));
-            CompararEstados(adyacenteD);
-            adyacenteD.setG(nodoActual.getG()+adyacenteD.getCost());
-            adyacenteD.setH(adyacenteD.getDiffer());
-            nodosAdyacentes.add(adyacenteD);
+            adyacenteD.setMatrix(matrizU);
+            //Verifica que adyacente generado no se encuentre en lista de adyacentes
+            indice=Contiene(nodosAdyacentes,adyacenteD);
+             if(indice==-1)//si no, lo adjunta
+             {
         
-        
+                adyacenteD.setPadre(nodoActual);
+                adyacenteD.setCost(1);                           
+                adyacenteD.setG(nodoActual.getG()+adyacenteD.getCost());
+                adyacenteD.setH(H(adyacenteD.getMatrix()));
+                nodosAdyacentes.add(adyacenteD);
+             }
+        }
+        //recorre listaAdyacentes para verificar que no exista en abiertos ni cerrados
         for(int j=0;j<nodosAdyacentes.size();j++)
         {
+            //indice de lista cerrados que contiene misma matriz que nodo de adyacentes
             int indiceCerrados =Contiene(this.listaCerrados,(Tower)nodosAdyacentes.get(j));
+            //indice de pila abiertos que contiene misma matriz que nodo de adyacentes
             int indiceAbiertos =Contiene(this.listaAbierta,(Tower)nodosAdyacentes.get(j));
-            if(indiceCerrados==-1)            
+            
+            if(indiceCerrados==-1)   //si no esta en cerrados         
                 {
-                    if(indiceAbiertos!=-1)
+                    if(indiceAbiertos!=-1)//si existe en abiertos
                     {
-                        if(((Tower)listaAbierta.get(indiceAbiertos)).getF()>=((Tower)nodosAdyacentes.get(j)).getF())
-                        {
+                        //Compara peso de camino recorrido
+                        if(((Tower)nodosAdyacentes.get(j)).getG()<((Tower)listaAbierta.get(indiceAbiertos)).getG())
+                        {   
+                            //si el adyacente tiene menor peso que el de abiertos, se elimina el de abiertos
                             listaAbierta.remove(indiceAbiertos);
                         }
-                        else
+                        else //si no, se elimina el adyacente
                         {
                             nodosAdyacentes.remove(j);
                         }
                     }
                 }
-            else
+            else // si esta en cerrados se elimina el adyacente
             {
                 nodosAdyacentes.remove(j);
             }
-        }
-        if(nodosAdyacentes.size()>0){
-//           System.out.println("Lista Adyacente:");
-//            for(int i=0;i<nodosAdyacentes.size();i++)
-//            {
-//                System.out.print("indice: ");
-//                System.out.println(i);
-//                ((Tower)nodosAdyacentes.get(i)).printMatrix();
-//                
-//            }
-        Collections.sort(nodosAdyacentes,Tower.TowerFComparator);
-        this.listaAbierta.addAll(0,nodosAdyacentes);
+        }//si existen nodos adyacentes
+        if(nodosAdyacentes.size()>0)
+        {
+            //agrego nodos adyacentes
+            this.listaAbierta.addAll(0,nodosAdyacentes);
+            //reordeno listaAbierta
+            Collections.sort(listaAbierta,Tower.TowerFComparator);
         }
     }    
-    
+    //Calcula el valor heuristico de costo futuro
+    //Realiza una sumatoria del valor absoluto de las diferencias entre cada celda que se encuentre 
+    //equivocada y el espacio vacio. Como es un aproximado se multiplica dicho valor
+    //por un valor arbitrario 3
+    //este es el principio del algoritmo Manhattan (adaptado para multiples caminos)
+    public int H(int[][] actual)
+    {
+        int heuristico=0;
+        for(int i=0;i<actual.length-1;i++)
+            for(int j=0;j<actual[i].length-1;j++)
+                if(actual[i][j]!=estFinal[i][j])
+                {
+                    int fila=getRowBlankSpace(actual);
+                    int columna = getColumnBlankSpace(actual);
+                    heuristico += (Math.abs(fila-i)+Math.abs(columna-j))*3;
+                }
+                    
+        return heuristico;
+    }
+    ///Verifica si una lista de nodos contiene un nodo específico,
+    /// realiza la comparacion por matriz
     public int Contiene(ArrayList<Tower> listado,Tower nodo)
     {
         int resultado=-1;
@@ -185,6 +229,7 @@ public class A_Estrella {
                 resultado=i;
         }
         return resultado;
-    } 
+    }
+    
         
 }
