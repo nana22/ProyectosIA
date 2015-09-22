@@ -54,7 +54,7 @@ public class Movements {
     
     public int[][] MoveDown(int[][] matrix){//Espacio queda abajo
         int row=getRowBlankSpace(matrix);
-        if(row<4)
+        if(row<matrix.length-1)
         {
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row+1][column];
@@ -62,6 +62,8 @@ public class Movements {
         matrix[row][column]=element;
         matrix[row+1][column]=-1;
         }
+        else
+            return null;
         return matrix;
     }
     
@@ -71,8 +73,13 @@ public class Movements {
         int column=getColumnBlankSpace(matrix);
         int element=matrix[row-1][column];
         //System.out.println("elemento "+element+ "fila "+ row+" columna "+row);
+        if(element!=5){
         matrix[row][column]=element;
         matrix[row-1][column]=-1;}
+        else return null;
+        }
+        else
+            return null;
         return matrix;
     }
     public void MoveColumn(int[][]matrix){//Realiza el movimiento de columna permitido
