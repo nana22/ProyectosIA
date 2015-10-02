@@ -252,7 +252,7 @@ public class A_Estrella {
             for(int j=0;j<actual[i].length;j++)
                 if(actual[i][j]!=estFinal[i][j] )
                 {   
-                    heuristico += (Math.abs(fila-i)+Math.abs(columna-j))*3;
+                     heuristico += ((Math.abs(fila-i)+Math.abs(columna-j))*3)+(actual.length - i);
                 }
         
       //  heuristico= (int)(heuristico/4);
